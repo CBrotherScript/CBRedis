@@ -1,0 +1,146 @@
+import lib/redis
+
+function main(parm)
+{
+	//Sleep(1000 * 10);
+	var client = new redis::Client();
+	if(!client.connect("127.0.0.1",6379,5000))
+	{
+		print "connect err!";
+		return;
+	}
+	
+	if(!client.ping())
+	{
+		print "ping err!";
+		return;
+	}
+	
+	print client.select(0);
+	print "dbsize:" + client.dbSize();
+	
+	var byteArray = new ByteArray();
+	byteArray.writeInt(100);
+	byteArray.writeString("321");
+	print client.set("kk2",byteArray);
+	
+	print client.get("kk");
+	print client.set("kk",123);
+	var bytes = client.getBytes("kk2");
+	print bytes;
+	print bytes.readInt();
+	print bytes.readString();
+	
+	print "connect success!";
+	print client;
+	print client.strlen("kk2");
+	print "exists kk2:" + client.exists("kk2");
+	print "exists kk5:" + client.exists("kk5");	
+	print client.expire("kk2",60);
+	print client.pexpire("kk",60 * 1000);
+	print client.ttl("kk2");
+	print client.pttl("kk2");
+	print client.persist("kk2");
+	
+	client.hset("a","a1",2);
+	client.hset("a","a2","333");
+	
+	print client.hget("a","a2");
+	print client.hget("a","a1");	
+	print client.hexists("a","a2");
+	print client.hlen("a");
+	var keys = client.hkeys("a");
+	print json::toJsonString(keys);
+	var vals = client.hvals("a");
+	print json::toJsonString(vals);
+	var alls = client.hgetAll("a");
+	print json::toJsonString(alls);
+	print client.hdel("a","a1");
+	
+	print client.type("kk");
+	print client.type("kk2");
+	print client.type("a");	
+	
+	print "lpush:" + client.lpush("list1",777);
+	print client.rpush("list1",66);
+	print client.rpush("list1","22","aa");
+	var listValue = client.lrange("list1",0,-1);
+	print json::toJsonString(listValue);
+	
+	print client.lindex("list1",3);
+	
+	print client.linsertAfter("list1","66","bbb");
+	var listValue = client.lrange("list1",0,-1);
+	print json::toJsonString(listValue);
+	
+	print client.linsertBefore("list1","aa","zzz");
+	var listValue = client.lrange("list1",0,-1);
+	print json::toJsonString(listValue);
+	
+	print client.lpop("list1");
+	
+	print client.lrem("list1",0,"zzz");
+	
+	print client.lset("list1",0,"ppppp");
+	
+	print client.sadd("key1","a");
+	print client.sadd("key1","b");
+	print client.sadd("key1","c");
+	print client.sadd("key1","x");
+	print client.sadd("key1","z");
+	print client.sadd("key2","c");
+	print client.sadd("key2","d");
+	print client.sadd("key2","e");
+	var diffarray = client.sdiff("key1","key2");
+	print json::toJsonString(diffarray);
+	var sunionarray = client.sunion("key1","key2");
+	print json::toJsonString(sunionarray);
+	var sinterarray = client.sinter("key1","key2");
+	print json::toJsonString(sinterarray);
+	
+	print client.scard("key1");
+	print client.scard("key2");
+	
+	print client.srandMember("key2");
+	var randArray = client.srandMember("key2",2);
+	print json::toJsonString(randArray);
+	
+	print client.srem("key1","c");
+	print client.spop("key1");
+	
+	var allarray = client.smembers("key1");
+	print json::toJsonString(allarray);	
+	
+	print client.zadd("key5",1,"one");
+	print client.zadd("key5",1,"one1");
+	print client.zadd("key5",2,"two");
+	print client.zadd("key5",2,"two2");
+	print client.zadd("key5",3,"three");
+	print client.zadd("key5",3,"three3");
+	var zrandArray = client.zrange("key5",0,-1);
+	print json::toJsonString(zrandArray);
+	var zrevrangeArray = client.zrevrange("key5","two","two1");
+	print json::toJsonString(zrevrangeArray);
+	
+	print client.zcard("key5");
+	print client.zcount("key5",1,2);
+	
+	print client.zscore("key5","two2");
+	print client.zrank("key5","two2");
+	print client.zrevrank("key5","two2");
+	print "---";
+	
+	print client.set("ti",100);
+	print client.get("ti");
+	print client.incr("ti");
+	print client.get("ti");
+	print client.decr("ti");
+	print client.get("ti");	
+	print "---";
+	print client.decrBy("ti",100);
+	print client.get("ti");	
+	print client.incrBy("ti",99);
+	print client.get("ti");	
+	print client.incrByFloat("ti",10.001);
+	print client.get("ti");
+}

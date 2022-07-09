@@ -9,7 +9,7 @@
     linux_x86 : ext\CBRedis\linux\amd64\CBRedis.so    
     linux_x64 : ext\CBRedis\linux\x86\CBRedis.so    
     macos_x64 : ext\CBRedis\mac\amd64\CBRedis.dylib
-    3. lib/redis.cb和sample/redis_test.cb放到CBrother对应目录下
+2. lib/redis.cb和sample/redis_test.cb放到CBrother对应目录下
     
     
 ## 安装成功后使用的例子

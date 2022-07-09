@@ -14,8 +14,8 @@
     
 ## 安装成功后使用的例子
 ```javascript
-
 import lib/redis
+
 function main(parm)
 {
     var client = new redis::Client();

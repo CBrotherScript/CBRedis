@@ -18,16 +18,16 @@
 import lib/redis
 function main(parm)
 {
-  var client = new redis::Client();
-  if(!client.connect("127.0.0.1",6379,5000))
-  {
-    print "connect err!";
-    return;
-  }
-  
-  client.select(0);
-  
-  client.set("kk",123);
-  print client.get("kk");
+    var client = new redis::Client();
+    if(!client.connect("127.0.0.1",6379,5000))
+    {
+        print "connect err!";
+        return;
+    }
+
+    client.select(0);
+
+    client.set("kk",123);
+    print client.get("kk");
 }
 ```
